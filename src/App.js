@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import debounce from 'lodash/debounce';
+import { Search, User, RepoPreview } from 'components';
+import { Spin } from 'antd';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+const App = () => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedRepo, setSelectedRepo] = useState({});
+
+    const _onSearch = (value) => {
+        setSearchQuery(value);
+        setSelectedRepo({}); // remove display on search
+    }
+
+    const onSearch = debounce(_onSearch, 300);
+    const onRepoSelect = (name, owner) => setSelectedRepo({name, owner})
+
+    return <div className='app'>
+            <div className='search-bar'>
+                <Search placeholder='Search...' onSearch={_onSearch} onChange={onSearch} />
+                <User name={searchQuery} onRepoSelect={onRepoSelect} />
+            </div>
+            <div className='content'> <RepoPreview {...selectedRepo}/>
+            </div>
     </div>
-  );
 }
 
 export default App;
