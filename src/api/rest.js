@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {token} from './api';
+import { token } from 'config'
 
 const baseURL = 'https://api.github.com/repos/'
 
